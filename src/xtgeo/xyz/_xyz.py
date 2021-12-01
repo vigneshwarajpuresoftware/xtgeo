@@ -186,11 +186,19 @@ class XYZ(ABC):
         """
         ...
 
+    def protected_columns(self):
+        """
+        Returns:
+            Columns not deleted by :meth:`delete_columns`, for
+            instance the coordinate columns.
+        """
+        return [self.xname, self.yname, self.zname]
+
     def delete_columns(self, clist, strict=False):
         """Delete one or more columns by name in a safe way for Points or Polygons.
 
-        Note that the coordinate columns will be protected, as well as then
-        POLY_ID column (pname atribute) if Polygons.
+        Note that the columns returned by :meth:`protected_columns(self)` (for
+        instance, the coordinate columns) will not be deleted.
 
         Args:
             self (obj): Points or Polygons
@@ -206,9 +214,8 @@ class XYZ(ABC):
 
         .. versionadded:: 2.1
         """
-        protected = [self.xname, self.yname, self.zname]
         for cname in clist:
-            if cname in protected:
+            if cname in self.protected_columns():
                 xtg.warnuser(
                     f"The column {cname} is protected and will not be deleted."
                 )

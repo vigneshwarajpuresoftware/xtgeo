@@ -456,15 +456,9 @@ class Polygons(XYZ):  # pylint: disable=too-many-public-methods
     # ----------------------------------------------------------------------------------
     # Methods
     # ----------------------------------------------------------------------------------
-    def delete_columns(self, clist, strict=False):
-        if self.pname in clist:
-            xtg.warnuser(
-                f"The column {self.pname} is protected and will not be deleted."
-            )
-            clist = clist.copy()
-            clist.remove(self.pname)
-
-        super().delete_columns(clist, strict)
+    @inherit_docstring(inherit_from=XYZ.protected_columns)
+    def protected_columns(self):
+        return super().protected_columns() + [self.pname]
 
     @inherit_docstring(inherit_from=XYZ.from_file)
     def from_file(self, pfile, fformat="xyz"):
