@@ -302,7 +302,7 @@ def points_from_wells(
             poi = xtgeo.points_from_wells(...)
             nwells_applied = poi.get_nwells()
 
-    .. versionadded: 2.16
+    .. versionadded:: 2.16 Replaces :meth:`~Points.from_wells`
 
     """
     return Points(
