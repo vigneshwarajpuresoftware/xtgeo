@@ -44,6 +44,7 @@ def _file_importer(
         fformat = xtgeo_file.generic_format_by_proposal(fformat)  # default
     kwargs = _data_reader_factory(fformat)(xtgeo_file)
     kwargs["values"].dropna(inplace=True)
+    kwargs["filesrc"] = xtgeo_file.name
     return kwargs
 
 
@@ -481,6 +482,7 @@ class Points(XYZ):  # pylint: disable=too-many-public-methods, function-redefine
         yname: str = "Y_UTMN",
         zname: str = "Z_TVDSS",
         attributes: Optional[dict] = None,
+        filesrc: str = None,
     ):
         """Initialisation of Points()."""
         super().__init__(xname, yname, zname)
@@ -501,6 +503,7 @@ class Points(XYZ):  # pylint: disable=too-many-public-methods, function-redefine
         yname: str = "Y_UTMN",
         zname: str = "Z_TVDSS",
         attributes: Optional[dict] = None,
+        filesrc: str = None,
     ):
         """Used in deprecated methods."""
         super()._reset(xname, yname, zname)
@@ -511,16 +514,14 @@ class Points(XYZ):  # pylint: disable=too-many-public-methods, function-redefine
             self._df = values
 
         self._attrs = attributes
+        self._filesrc = None
 
     def __repr__(self):
-        return (
-            f"{self.__class__.__name__}("
-            f"values={repr(self._df)}, "
-            f"xname={self.xname}, "
-            f"yname={self.yname}, "
-            f"zname={self.zname}, "
-            f"attributes={self._attrs})"
+        # should be able to newobject = eval(repr(thisobject))
+        myrp = "{0.__class__.__name__} (filesrc={0._filesrc!r}, " "ID={1})".format(
+            self, id(self)
         )
+        return myrp
 
     def __str__(self):
         """User friendly print."""
@@ -684,7 +685,7 @@ class Points(XYZ):  # pylint: disable=too-many-public-methods, function-redefine
 
         df = pd.DataFrame(input)
         df.dropna(inplace=True)
-        self._reset(values=df)
+        self._reset(values=df, filesrc="DataFrame input")
 
     def to_file(
         self,

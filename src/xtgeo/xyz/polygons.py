@@ -344,21 +344,6 @@ class Polygons(XYZ):  # pylint: disable=too-many-public-methods
         else:
             self._df = values
 
-    def __repr__(self):
-        return (
-            f"{self.__class__.__name__}("
-            f"values={repr(self._df)}, "
-            f"xname={self.xname}, "
-            f"yname={self.yname}, "
-            f"zname={self.zname}, "
-            f"pname={self.pname}, "
-            f"hname={self.hname}, "
-            f"dhname={self.dhname}, "
-            f"tname={self.tname}, "
-            f"dtname={self.dtname}, "
-            f"name={self.name}, "
-        )
-
     @property
     def name(self):
         """Returns or sets the name of the instance."""
