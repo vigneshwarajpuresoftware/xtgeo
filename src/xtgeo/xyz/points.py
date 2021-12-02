@@ -508,13 +508,37 @@ class Points(XYZ):  # pylint: disable=too-many-public-methods, function-redefine
         """Used in deprecated methods."""
         super()._reset(xname, yname, zname)
 
+        self._attrs = attributes if attributes is not None else dict()
+        self._filesrc = filesrc
+
         if not isinstance(values, pd.DataFrame):
             self._df = _xyz_io._from_list_like(values, self._zname, attributes, False)
         else:
-            self._df = values
+            self._df: pd.DataFrame = values
+            self._dataframe_consistency_check()
 
-        self._attrs = attributes
-        self._filesrc = None
+    def _dataframe_consistency_check(self):
+        if self.xname not in self.dataframe:
+            raise ValueError(
+                f"xname={self.xname} is not a column "
+                f"of dataframe {self.dataframe.columns}"
+            )
+        if self.yname not in self.dataframe:
+            raise ValueError(
+                f"yname={self.yname} is not a column "
+                f"of dataframe {self.dataframe.columns}"
+            )
+        if self.zname not in self.dataframe:
+            raise ValueError(
+                f"zname={self.zname} is not a column "
+                f"of dataframe {self.dataframe.columns}"
+            )
+        for attr in self._attrs:
+            if attr not in self.dataframe:
+                raise ValueError(
+                    f"Attribute {attr} is not a column "
+                    f"of dataframe {self.dataframe.columns}"
+                )
 
     def __repr__(self):
         # should be able to newobject = eval(repr(thisobject))
@@ -650,8 +674,10 @@ class Points(XYZ):  # pylint: disable=too-many-public-methods, function-redefine
         deprecated_in="2.16",
         removed_in="4.0",
         current_version=xtgeo.version,
-        details="Use xtgeo.Points(xname=east, yname=north, zname=tvdmsl,"
-        " attributes=attributes) instead",
+        details="Use "
+        "xtgeo.Points("
+        "values=dfr[[east, nort, tvdsml]], xname=east, yname=north, zname=tvdmsl"
+        ") instead",
     )
     def from_dataframe(self, dfr, east="X", north="Y", tvdmsl="Z", attributes=None):
         """Import points/polygons from existing Pandas dataframe.
