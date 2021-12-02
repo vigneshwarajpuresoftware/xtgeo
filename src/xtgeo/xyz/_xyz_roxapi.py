@@ -402,6 +402,13 @@ def _get_roxxyz(
             if isinstance(category, list):
                 folders = category
                 folders.append(category)
+            elif isinstance(category, str) and "|" in category:
+                folders = category.split("|")
+            elif isinstance(category, str) and "/" in category:
+                folders = category.split("/")
+            elif isinstance(category, str):
+                folders = []
+                folders.append(category)
             else:
                 raise RuntimeError(
                     f"Cannot parse category: {category}, see documentation!"
