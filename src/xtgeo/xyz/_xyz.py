@@ -160,6 +160,9 @@ class XYZ(ABC):
     def from_list(self, plist):
         """Create Points or Polygons from a list-like input (deprecated).
 
+        This method is deprecated in favor of using e.g. xtgeo.Points(plist)
+        or xtgeo.Polygons(plist) instead.
+
         The following inputs are possible:
 
         * List of tuples [(x1, y1, z1, <id1>), (x2, y2, z2, <id2>), ...].
