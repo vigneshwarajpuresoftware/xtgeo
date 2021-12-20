@@ -197,7 +197,7 @@ class XYZ(ABC):
         return [self.xname, self.yname, self.zname]
 
     def delete_columns(self, clist, strict=False):
-        """Delete one or more columns by name in a safe way for Points or Polygons.
+        """Delete one or more columns by name.
 
         Note that the columns returned by :meth:`protected_columns(self)` (for
         instance, the coordinate columns) will not be deleted.
