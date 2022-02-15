@@ -17,9 +17,7 @@ jobs:
             cibw_image: win_amd64
           - runs_on: macos-latest
             cibw_image: macosx_x86_64
-          - runs_on: ubuntu-latest
-            cibw_arch: manylinux2014_aarch64
-
+            
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
       # pillow < 8.4 required for CIBW build
@@ -33,7 +31,20 @@ jobs:
       CIBW_TEST_COMMAND: >
         pushd {project} &&
         pytest  --disable-warnings -x -m "not hypothesis" --ignore tests/test_well --ignore-glob="*forks.py"
-      CIBW_BUILD: ${{ matrix.cibw_python }}-${{ matrix.os.cibw_image }}
+      CIBW_BUILD: ${{ matrix.cibw_python }}-${{ matrix.os.cibw_image }} 
+   
+  package-wheel:
+     runs-on: ${{ matrix.os }}
+     strategy:
+       fail-fast: false
+       matrix:
+         os: [ubuntu-latest, macos-latest, windows-latest]
+         arch: [auto]
+         include:
+           - os: ubuntu-latest
+             arch: aarch64
+           - os: macos-latest
+             arch: arm64
 
     steps:
       - uses: actions/checkout@v2
@@ -41,6 +52,15 @@ jobs:
           fetch-depth: 0
       - name: Set up Python
         uses: actions/setup-python@v2
+      
+      - name: Set up QEMU
+        if: ${{ matrix.arch == 'aarch64' }}
+        uses: docker/setup-qemu-action@v1 
+      
+      - name: Build wheels
+        env:
+          CIBW_ARCHS: ${{matrix.arch}}
+          CIBW_BUILD: cp36-* cp37-* cp38-* cp39-*
 
       - name: Install cibuildwheel
         run: >
