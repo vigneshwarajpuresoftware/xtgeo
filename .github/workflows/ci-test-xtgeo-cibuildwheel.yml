@@ -17,6 +17,8 @@ jobs:
             cibw_image: win_amd64
           - runs_on: macos-latest
             cibw_image: macosx_x86_64
+          - runs_on: ubuntu-latest
+            cibw_arch: manylinux2014_aarch64
             
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
@@ -43,8 +45,6 @@ jobs:
          include:
            - os: ubuntu-latest
              arch: aarch64
-           - os: macos-latest
-             arch: arm64
 
     steps:
       - uses: actions/checkout@v2
