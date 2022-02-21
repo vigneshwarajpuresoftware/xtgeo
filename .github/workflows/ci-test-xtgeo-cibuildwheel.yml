@@ -20,6 +20,7 @@ jobs:
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
       CIBW_ARCHS_LINUX: "auto aarch64"
+      CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014_aarch64
       # pillow < 8.4 required for CIBW build
       CIBW_BEFORE_TEST: >
         pushd {project} &&
