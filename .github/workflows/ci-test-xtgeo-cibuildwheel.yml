@@ -16,11 +16,10 @@ jobs:
             cibw_image: win_amd64
           - runs_on: macos-latest
             cibw_image: macosx_x86_64
-          - runs_on: ubuntu-latest
-            cibw_image: manylinux2014_aarch64
 
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
+      CIBW_ARCHS_LINUX: "auto aarch64"
       # pillow < 8.4 required for CIBW build
       CIBW_BEFORE_TEST: >
         pushd {project} &&
@@ -40,6 +39,10 @@ jobs:
           fetch-depth: 0
       - name: Set up Python
         uses: actions/setup-python@v2
+      
+      - name: Set up QEMU
+        if: ${{ matrix.arch == 'aarch64' }}
+        uses: docker/setup-qemu-action@v1  
 
       - name: Install cibuildwheel
         run: >
