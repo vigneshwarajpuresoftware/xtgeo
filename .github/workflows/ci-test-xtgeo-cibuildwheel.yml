@@ -41,7 +41,7 @@ jobs:
         uses: actions/setup-python@v2
       
       - name: Set up QEMU
-        if: ${{ CIBW_ARCHS_LINUX == " auto aarch64" }}
+        if: ${{ CIBW_ARCHS_LINUX == "auto aarch64" }}
         uses: docker/setup-qemu-action@v1  
 
       - name: Install cibuildwheel
