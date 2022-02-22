@@ -17,10 +17,11 @@ jobs:
           - runs_on: macos-latest
             cibw_image: macosx_x86_64
           - runs_on: ubuntu-latest
-            cibw_image: manylinux2014_aarch64
+            cibw_image: manylinux_aarch64
 
     env:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
+      CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
       CIBW_ARCHS_LINUX: "auto aarch64"
       # pillow < 8.4 required for CIBW build
       CIBW_BEFORE_TEST: >
