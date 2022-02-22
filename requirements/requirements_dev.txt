@@ -2,7 +2,7 @@ setuptools>=43
 setuptools_scm>=3.2.0
 scikit-build
 ninja>=1.9.0.post1
-cmake>3.13.3
+cmake>3.22.2
 pip>=20
 wheel>=0.29.0
 flake8
