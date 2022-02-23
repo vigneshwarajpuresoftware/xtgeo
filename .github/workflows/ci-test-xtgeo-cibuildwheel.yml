@@ -26,9 +26,9 @@ jobs:
       CIBW_BEFORE_TEST: >
         pushd {project} &&
         pip install "pillow<8.4.0"
-        yum install geos-devel &&
         pip install -r requirements/requirements_test.txt &&
         git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
+      CIBW_BEFORE_TEST_LINUX: yum install -y geos-devel &&
       # Ignore forking tests as they do not work well with CIBW
       # ignore tests/test_well due to missing pytables wheel
       CIBW_TEST_COMMAND: >
