@@ -28,7 +28,7 @@ jobs:
         pip install "pillow<8.4.0"
         pip install -r requirements/requirements_test.txt &&
         git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
-      CIBW_BEFORE_TEST_LINUX: yum install -y geos-devel &&
+      CIBW_BEFORE_TEST_LINUX: yum install -y geos-devel 
       # Ignore forking tests as they do not work well with CIBW
       # ignore tests/test_well due to missing pytables wheel
       CIBW_TEST_COMMAND: >
@@ -52,6 +52,7 @@ jobs:
           python -m pip install pip -U &&
           python -m pip install wheel &&
           python -m pip install cibuildwheel
+
       - name: Run cibuildwheel
         run: python -m cibuildwheel --output-dir wheelhouse
       - name: Publish
