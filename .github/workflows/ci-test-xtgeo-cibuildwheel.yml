@@ -26,6 +26,7 @@ jobs:
       CIBW_BEFORE_TEST: >
         pushd {project} &&
         pip install "pillow<8.4.0"
+        yum install geos-devel &&
         pip install -r requirements/requirements_test.txt &&
         git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
       # Ignore forking tests as they do not work well with CIBW
@@ -53,12 +54,6 @@ jobs:
           python -m pip install cibuildwheel
       - name: Run cibuildwheel
         run: python -m cibuildwheel --output-dir wheelhouse
-      - name: Run cibuildwheel aarch64
-        if: ${{ matrix.os.runs_on == 'ubuntu-latest' }}
-        run: >
-           yum install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
-           yum install geos-devel 
-           python -m cibuildwheel --output-dir wheelhouse
       - name: Publish
         if: ${{ github.event_name == 'release' }}
         env:
