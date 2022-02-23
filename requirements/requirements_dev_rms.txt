@@ -4,7 +4,7 @@ setuptools>=30.3.0
 setuptools_scm>=3.2.0
 scikit-build
 ninja>=1.9.0.post1
-cmake==3.15.3
+cmake==3.22.2
 wheel>=0.29.0
 flake8
 pydocstyle
