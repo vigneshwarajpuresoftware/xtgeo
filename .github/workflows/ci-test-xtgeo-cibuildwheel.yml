@@ -7,8 +7,9 @@ jobs:
     name: CIBW python ${{ matrix.cibw_python }} on ${{ matrix.os.runs_on }}
     runs-on: ${{ matrix.os.runs_on }}
     strategy:
+      fail-fast: false
       matrix:
-        cibw_python: [cp36, cp37, cp38, cp39]
+        cibw_python: [cp37, cp38, cp39]
         os:
           - runs_on: ubuntu-latest
             cibw_image: manylinux_x86_64
@@ -23,9 +24,17 @@ jobs:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
       CIBW_ARCHS_LINUX: "auto aarch64"
       # pillow < 8.4 required for CIBW build
+      CIBW_BEFORE_TEST_LINUX: >
+        pushd {project} &&
+        pip install "pillow<8.4.0" &&
+        pip install -r requirements/requirements_test.txt &&
+        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata &&      
+        yum install -y epel-release &&
+        yum-config-manager --enable epel &&
+        yum install -y geos-devel
       CIBW_BEFORE_TEST: >
         pushd {project} &&
-        pip install "pillow<8.4.0"
+        pip install "pillow<8.4.0" &&
         pip install -r requirements/requirements_test.txt &&
         git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
       # Ignore forking tests as they do not work well with CIBW
@@ -51,7 +60,6 @@ jobs:
           python -m pip install pip -U &&
           python -m pip install wheel &&
           python -m pip install cibuildwheel
-
       - name: Run cibuildwheel
         run: python -m cibuildwheel --output-dir wheelhouse
       - name: Publish
