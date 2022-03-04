@@ -25,7 +25,7 @@ jobs:
       CIBW_ARCHS_LINUX: "auto aarch64"
       # pillow < 8.4 required for CIBW build
       CIBW_BEFORE_TEST_LINUX: >
-        if ${{ CIBW_ARCHS_LINUX == 'aarch64' }}
+        if ${{ cibw_image == 'manylinux_aarch64' }}
         then
         yum install -y epel-release &&
         yum-config-manager --enable epel &&
