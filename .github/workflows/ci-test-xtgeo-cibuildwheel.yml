@@ -25,17 +25,14 @@ jobs:
       CIBW_ARCHS_LINUX: "auto aarch64"
       # pillow < 8.4 required for CIBW build
       CIBW_BEFORE_TEST_LINUX: >
-        if ${{ cibw_image == 'manylinux_aarch64' }}
-        then
-        yum install -y epel-release &&
-        yum-config-manager --enable epel &&
-        yum install -y geos-devel
-        else
         pushd {project} &&
         pip install "pillow<8.4.0" &&
         pip install -r requirements/requirements_test.txt &&
-        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata &&    
-        fi
+        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata && 
+      if: ${{ matrix.cibw_image == 'manylinux_aarch64' }}
+        yum install -y epel-release &&
+        yum-config-manager --enable epel &&
+        yum install -y geos-devel
       CIBW_BEFORE_TEST: >
         pushd {project} &&
         pip install "pillow<8.4.0" &&
